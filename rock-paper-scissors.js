@@ -1,3 +1,5 @@
+//I plan to be more mindful of global scope in the future when it comes to variables
+
 let humanScore = 0;
 let computerScore = 0;
 let gameCount = 0;
@@ -10,8 +12,6 @@ function getComputerChoice() {
         return "paper";
     } else if (randomNumber === 2) {
         return "scissors";
-    } else if (randomNumber === 3) {
-        console.log("Go buy a lottery ticket because you just got disgustingly lucky rolling a 1 with Math.random()!")
     }
 }
 
@@ -19,12 +19,15 @@ function getHumanChoice () {
     let choice = prompt("Enter rock, paper, or scissors");
     if (choice === "shoe") {
         humanScore += 9000;
+        gameCount += 5;
         console.log(`You unlocked the secret ending.`)
         endGame();
     } else {
         return choice.toLowerCase();
     }
 }
+
+//I chose to ignore ties affecting the game count and score
 
 function playRound(humanChoice, computerChoice) {
     if (humanChoice === computerChoice) {
@@ -56,6 +59,8 @@ function playGame() {
     }
     endGame();
 }
+
+//I created a endGame() function so I could use it for when the player inputs shoe in getHumanChoice() in addition to it's use inside the playGame() function.
 
 function endGame() {
     if (humanScore > computerScore) {

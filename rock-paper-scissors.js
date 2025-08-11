@@ -2,21 +2,24 @@ let humanScore = 0;
 let computerScore = 0;
 let gameCount = 0;
 
+const buttons = document.querySelectorAll('.btn');
+const resultsContainer = document.querySelector('.results');
+
 function getComputerChoice() {
     const choices = ['rock', 'paper', 'scissors'];
     const randomIndex = Math.floor(Math.random() * choices.length);
     return choices[randomIndex];
 };
 
-function getHumanChoice(button) {
-    return button.target.textContent.toLowerCase();
+function getHumanChoice(buttonChoice) {
+    return buttonChoice.target.textContent.toLowerCase();
 };
 
 function playRound(humanChoice, computerChoice) {
-    const newResult = document.createElement('p');
-
+    const roundResult = document.createElement('p');
+    
     if (humanChoice === computerChoice) {
-        newResult.textContent = `The computer chose ${computerChoice}.\nYou tied this round. Your score:${humanScore} Computer score:${computerScore}`;
+        roundResult.textContent = `The computer chose ${computerChoice}.\nYou tied this round. Your score:${humanScore} Computer score:${computerScore}`;
         // I chose to not increase the game count or score in the event of a 
         // tie since that's how it usually works in rock, paper, scissors.
     } else if (
@@ -26,7 +29,7 @@ function playRound(humanChoice, computerChoice) {
     ) {
         humanScore++;
         gameCount++;
-        newResult.textContent = `The computer chose ${computerChoice}.\nYou won this round! Your score:${humanScore} Computer score:${computerScore}`;
+        roundResult.textContent = `The computer chose ${computerChoice}.\nYou won this round! Your score:${humanScore} Computer score:${computerScore}`;
     } else if (
         (humanChoice === "rock" && computerChoice === "paper") || 
         (humanChoice === "paper" && computerChoice === "scissors") || 
@@ -34,9 +37,9 @@ function playRound(humanChoice, computerChoice) {
     ) {
         computerScore++;
         gameCount++;
-        newResult.textContent = `The computer chose ${computerChoice}.\nYou lost this round. Your score:${humanScore} Computer score:${computerScore}`;
+        roundResult.textContent = `The computer chose ${computerChoice}.\nYou lost this round. Your score:${humanScore} Computer score:${computerScore}`;
     }
-    results.appendChild(newResult);
+    resultsContainer.appendChild(roundResult);
 };
 
 function playGame(button) {
@@ -54,23 +57,21 @@ function playGame(button) {
 // places. This might need cleaning up.
 
 function endGame() {
-    const newResult = document.createElement('p');
+    const endResult = document.createElement('p');
+    endResult.style.fontWeight = 'bold';
 
     if (humanScore > computerScore) {
-        newResult.textContent = `\u{1F389}CONGRATS, YOU WON THE GAME!!!\u{1F389} \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
+        endResult.textContent = `\u{1F389}CONGRATS, YOU WON THE GAME!!!\u{1F389} \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
     } else if (computerScore > humanScore) {
-        newResult.textContent = `You lost the game. :( \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
+        endResult.textContent = `You lost the game. :( \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
     } else if (computerScore === humanScore) {
-        newResult.textContent = `Somehow it's a tie. \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
+        endResult.textContent = `Somehow it's a tie. \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
     } else {
-        newResult.textContent = "Something went wrong. I'm new to coding so don't blame me!";
+        endResult.textContent = "Something went wrong. I'm new to coding so don't blame me!";
     }
 
-    results.appendChild(newResult);
-}
-
-const buttons = document.querySelectorAll('.btn');
-const results = document.querySelector('.results');
+    resultsContainer.appendChild(endResult);
+};
 
 buttons.forEach(button => {
     button.addEventListener('click', (playGame));

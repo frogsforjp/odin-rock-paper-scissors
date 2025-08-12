@@ -1,34 +1,31 @@
+body {
+    text-align: center;
+}
+
 .btn {
     flex-shrink: 1;
     flex-wrap: nowrap;
-    flex-basis: 200px;
+    flex-basis: 120px;
 
     color: white;
-    padding: 20px 20px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: rgb(57, 131, 119);
 }
 
 .btn-container {
     display: flex;
+    justify-content: center;
     gap: 10px;
 }
 
-.rock {
-    background-color: rgb(37, 9, 9);
+.round-result {
+    font-size: 24px;
 }
 
-.paper {
-    background-color: rgb(133, 133, 133);
-}
-
-.scissors {
-    background-color: rgb(10, 10, 148);
-}
-
-.results {
-    font-size: large;
+.score-count {
+    font-size: 24px;
 }

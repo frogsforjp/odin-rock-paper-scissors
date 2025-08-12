@@ -3,7 +3,15 @@ let computerScore = 0;
 let gameCount = 0;
 
 const buttons = document.querySelectorAll('.btn');
-const resultsContainer = document.querySelector('.results');
+const roundResult = document.querySelector('.round-result');
+
+function updateScore() {
+    const humanScoreCount = document.querySelector('.human-score');
+    humanScoreCount.textContent = `${humanScore}`;
+
+    const computerScoreCount = document.querySelector('.computer-score');
+    computerScoreCount.textContent = `${computerScore}`;
+};
 
 function getComputerChoice() {
     const choices = ['rock', 'paper', 'scissors'];
@@ -16,11 +24,10 @@ function getHumanChoice(buttonChoice) {
 };
 
 function playRound(humanChoice, computerChoice) {
-    const roundResult = document.createElement('p');
     
     if (humanChoice === computerChoice) {
-        roundResult.textContent = `The computer chose ${computerChoice}.\nYou tied this round. Your score:${humanScore} Computer score:${computerScore}`;
-        // I chose to not increase the game count or score in the event of a 
+        roundResult.textContent = `You tied the round.`;
+        // I chose to not increase the game count or score in the event of a
         // tie since that's how it usually works in rock, paper, scissors.
     } else if (
         (humanChoice ==="rock" && computerChoice === "scissors") || 
@@ -29,7 +36,7 @@ function playRound(humanChoice, computerChoice) {
     ) {
         humanScore++;
         gameCount++;
-        roundResult.textContent = `The computer chose ${computerChoice}.\nYou won this round! Your score:${humanScore} Computer score:${computerScore}`;
+        roundResult.textContent = `You won the round!`;
     } else if (
         (humanChoice === "rock" && computerChoice === "paper") || 
         (humanChoice === "paper" && computerChoice === "scissors") || 
@@ -37,40 +44,68 @@ function playRound(humanChoice, computerChoice) {
     ) {
         computerScore++;
         gameCount++;
-        roundResult.textContent = `The computer chose ${computerChoice}.\nYou lost this round. Your score:${humanScore} Computer score:${computerScore}`;
+        roundResult.textContent = `You lost the round.`;
     }
-    resultsContainer.appendChild(roundResult);
+    updateScore();
 };
 
 function playGame(button) {
     if (gameCount < 5) {
-        const humanSelection = getHumanChoice(button);
-        const computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
+        const humanChoice = getHumanChoice(button);
+        const computerChoice = getComputerChoice();
+        playRound(humanChoice, computerChoice);
         };
     if (gameCount >= 5) {
         endGame();
     };
 };
 
-// I created a separate function for endgame because I initially used it in two
-// places. This might need cleaning up.
-
 function endGame() {
-    const endResult = document.createElement('p');
-    endResult.style.fontWeight = 'bold';
+    const roundResult = document.querySelector('.round-result');
 
     if (humanScore > computerScore) {
-        endResult.textContent = `\u{1F389}CONGRATS, YOU WON THE GAME!!!\u{1F389} \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
+        roundResult.textContent = `\u{1F389}CONGRATS, YOU WON THE GAME!!!\u{1F389}`;
     } else if (computerScore > humanScore) {
-        endResult.textContent = `You lost the game. :( \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
+        roundResult.textContent = `You lost the game. better luck next time. :(`;
     } else if (computerScore === humanScore) {
-        endResult.textContent = `Somehow it's a tie. \nYour final score: ${humanScore}. Computer final score: ${computerScore}`;
+        roundResult.textContent = `Somehow it's a tie.`;
     } else {
-        endResult.textContent = "Something went wrong. I'm new to coding so don't blame me!";
+        roundResult.textContent = "Something went wrong. I'm new to coding so don't blame me!";
     }
+    createReplayButton();
+};
 
-    resultsContainer.appendChild(endResult);
+function createReplayButton() {
+    let replayMessages = [
+        'Care for another game?',
+        'Another round perhaps?',
+        'Surely another game?',
+        'Quitting so soon?',
+        'I know you want another game',
+        'Shall we go again?',
+        'Leaving so soon? :('
+    ];
+    const randomIndex = Math.floor(Math.random() * replayMessages.length);
+    
+    const replayClass = document.querySelector('.replay');
+    // I added this conditional so that I couldn't spam create new buttons
+    // and I had to move the replayClass outside of it for the code to work
+    if (!replayClass.querySelector('button')) {
+        const replayButton = document.createElement('button');
+        replayButton.textContent = replayMessages[randomIndex];
+        replayClass.append(replayButton);
+        replayButton.addEventListener('click', replayGame);
+    }
+};
+
+function replayGame() {
+    humanScore = 0;
+    computerScore = 0;
+    gameCount = 0;
+    updateScore();
+    roundResult.textContent = "Choose your weapon!";
+    const replayClass = document.querySelector('.replay');
+    replayClass.textContent = '';
 };
 
 buttons.forEach(button => {
